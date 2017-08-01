@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { getFriends } from './actions';
+import { friendInput } from './actions';
+import { bindActionCreators } from 'redux';
+import Friend from './Friend';
+
 
 class FriendsList extends Component {
   constructor(props) {
@@ -8,15 +13,27 @@ class FriendsList extends Component {
     this.state = {
       input: ''
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount() {
-
+    this.props.getFriends();
+    this.setState({input :''});
   }
-  onChange() {
-
+  handleChange(event) {
+    this.setState({input: event.target.value})
   }
-  onSubmit() {
-
+  handleSubmit(event) {
+    event.preventDefault();
+    const arr = this.state.input.split(' ');
+    this.props.friendInput({
+      name: arr[0],
+      age: arr[1],
+      email: arr[2]
+    })
+    this.setState({
+      input: ''
+    });
   }
   render() {
     return (
@@ -28,8 +45,10 @@ class FriendsList extends Component {
             );
           })}
         </ul>
-        <form>
-          <input />
+        <form onSubmit = { this.handleSubmit }>
+          <input value = {this.state.input }
+           onChange = {this.handleChange}
+           placeholder = 'name age email' />
           </form>
       </div>
 
@@ -43,4 +62,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(FriendsList);
+function mapDispatchToProps(dispatch) {
+  return {
+    getFriends: bindActionCreators(getFriends, dispatch),
+    friendInput: bindActionCreators(friendInput, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsList);

@@ -13,7 +13,12 @@ export const getFriends = () => {
 export const FRIEND_INPUT = 'FRIEND_INPUT';
 
 export const friendInput = (data) => {
-  const promise = axios.post('http://localhost:5000/friends');
+  
+  const promise = axios.post('http://localhost:5000/new-friend', {
+    name: data.name,
+    age: data.age,
+    email: data.email
+  })
   return {
     type: FRIEND_INPUT,
     payload: promise
