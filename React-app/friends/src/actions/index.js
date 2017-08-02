@@ -20,7 +20,7 @@ export const friendInput = (data) => {
     email: data.email
   })
   return {
-    type: FRIEND_INPUT,
+    type: GET_FRIENDS,
     payload: promise
   }
 };
